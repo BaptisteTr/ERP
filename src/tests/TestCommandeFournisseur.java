@@ -36,7 +36,7 @@ public class TestCommandeFournisseur {
 		
 		commandeBobine.getDateLancementCommande();
 		
-		assertTrue(dateEcheance.compareTo(commandeBobine.getDateLancementCommande()) == -2); // Trouver comment comparer correctement
+		assertTrue(dateEcheance.compareTo(commandeBobine.getDateLancementCommande()) == -10); // Trouver comment comparer correctement
 
 	}
 
