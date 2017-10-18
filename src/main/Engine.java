@@ -3,12 +3,28 @@ package main;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class Engine {
 
+	@SuppressWarnings("deprecation")
 	public static void main(String[] args) throws InterruptedException {
-		//Ajout des dates de livraison à la liste pour les livraisons de 15000 unitées
+		
+		double prixAcierCourant;
+		int moisCourant;
+		double prixProd = 6000;
+		
+		int moisDateDepart = new Date("10/01/1969").getMonth();
+		int anneeDateDepart = new Date ("10/01/1969").getYear();
+		
+		// On crÃ©e notre queue de calcul de prix de commande et on ajoute le coÃ»t des deux bobines de dÃ©part
+		Queue<Double> commandesPassees = new LinkedList<Double>();
+		commandesPassees.add((double) 10000);
+		commandesPassees.add((double) 10000);
+		
+		//Ajout des dates de livraison ï¿½ la liste pour les livraisons de 15000 unitï¿½es
 		//A mettre dans un objet
 		List<Calendar> lesLivraisons15000 = new ArrayList<Calendar>();
 		Calendar dateLivraison = Calendar.getInstance();
@@ -24,7 +40,7 @@ public class Engine {
 		lesLivraisons15000.add((Calendar) dateLivraison.clone());
 		dateLivraison.setTime(new Date("02/01/1970"));
 		lesLivraisons15000.add((Calendar) dateLivraison.clone());
-		//Ajout des dates de livraison à la liste pour les livraisons de 5000 unitées
+		//Ajout des dates de livraison ï¿½ la liste pour les livraisons de 5000 unitï¿½es
 		//A mettre dans un objet
 		List<Calendar> lesLivraisons5000 = new ArrayList<Calendar>();
 		dateLivraison.setTime(new Date("02/01/1970"));
@@ -40,10 +56,10 @@ public class Engine {
 		dateLivraison.setTime(new Date("02/25/1970"));
 		lesLivraisons5000.add((Calendar) dateLivraison.clone());
 
-		//Creation de la date de départ, creation de 2 dates supplémentaires
-		//pour le jour 1 et 2 car le temps de production de départ est de 12h (temps pour 1000 unitées)
-		//puis 6h car les machines fonctionnent en parallèles
-		//(il devrait être possible de le faire plus joliement
+		//Creation de la date de dï¿½part, creation de 2 dates supplï¿½mentaires
+		//pour le jour 1 et 2 car le temps de production de dï¿½part est de 12h (temps pour 1000 unitï¿½es)
+		//puis 6h car les machines fonctionnent en parallï¿½les
+		//(il devrait ï¿½tre possible de le faire plus joliement
 		Calendar dateCourante = Calendar.getInstance();
 		dateCourante.setTime(new Date("10/01/1969"));
 		Calendar jour1 = Calendar.getInstance();
@@ -53,28 +69,52 @@ public class Engine {
 		int production = 0;
 		int tpsProduction = 0;
 		while (true) {
-			//Verification si la date courante est une date de livraison pour les dates à 15000 unitées
+			//Verification si la date courante est une date de livraison pour les dates ï¿½ 15000 unitï¿½es
 			for (int i = 0; i < lesLivraisons5000.size(); i++) {
 				// System.out.println(dateCourante.compareTo(lesLivraisons5000.get(i)));
-				if (dateCourante.compareTo(lesLivraisons5000.get(i)) == 0)
+				if (dateCourante.compareTo(lesLivraisons5000.get(i)) == 0) {
 					production -= 5000;
+					
+					
+					for(int i2 = 0; i2<5; i2++){
+						prixProd += commandesPassees.poll();
+						System.out.println(commandesPassees);
+					}
+					prixProd += 5*6000;
+					
+					System.out.println("Livraison d'une commande de 5,000 boulons au "+dateCourante.getTime()+", coÃ»t de prod : "+ prixProd +" prix de vente "+ prixProd/0.3);
+
+					prixProd = 0;
+				}
 			}
-			//Verification si la date courante est une date de livraison pour les dates à 5000 unitées
-			//Une fois dans un objet, les 2 boucles seront mutialisées
+			//Verification si la date courante est une date de livraison pour les dates ï¿½ 5000 unitï¿½es
+			//Une fois dans un objet, les 2 boucles seront mutialisï¿½es
 			for (int i = 0; i < lesLivraisons15000.size(); i++) {
 
-				if (dateCourante.compareTo(lesLivraisons15000.get(i)) == 0)
+				if (dateCourante.compareTo(lesLivraisons15000.get(i)) == 0){
 					production -= 15000;
+					
+					for(int i2 = 0; i2<5; i2++){
+						prixProd += commandesPassees.poll();
+
+						System.out.println(commandesPassees);
+					}
+					prixProd += 15*6000;
+					
+					System.out.println("Livraison d'une commande de 15,000 boulons au "+dateCourante.getTime()+", coÃ»t de prod : "+ prixProd +" prix de vente "+ prixProd/0.3);
+
+					prixProd = 0;
+				}
 			}
-			//Verification si la date courante est bien un jour ouvré de la semaine (jour travaillé pour la production)
+			//Verification si la date courante est bien un jour ouvrï¿½ de la semaine (jour travaillï¿½ pour la production)
 			if (dateCourante.get(Calendar.DAY_OF_WEEK) != 1 && dateCourante.get(Calendar.DAY_OF_WEEK) != 7) {
-				//On ajoute le temps de production de la journée
+				//On ajoute le temps de production de la journï¿½e
 				tpsProduction += 7;
-				//On verifie si on se trouve dans le premier ou deuxième jour de prodution(depuis le départ de la prod)
-				//car la première production met 12h à sortir les premières pièces
+				//On verifie si on se trouve dans le premier ou deuxiï¿½me jour de prodution(depuis le dï¿½part de la prod)
+				//car la premiï¿½re production met 12h ï¿½ sortir les premiï¿½res piï¿½ces
 				if (dateCourante.compareTo(jour1) == 0 || dateCourante.compareTo(jour2) == 0) {
 					if (tpsProduction > 12) {
-						//AJout des 1000 unitées si la chaines de production à terminé (12h ici)
+						//AJout des 1000 unitï¿½es si la chaines de production ï¿½ terminï¿½ (12h ici)
 						production += 1000;
 						//On retire les 12h pour avoir un temps de production exact pour la suite
 						tpsProduction -= 12;
@@ -82,13 +122,23 @@ public class Engine {
 						dateCommande = (Calendar) dateCourante.clone();
 						dateCommande.add(Calendar.DATE, -10);
 						Date jour = dateCommande.getTime();
-						//Si la production à sorti 1000 unitées, 1 bobine à été consommé il faut donc en recommander 1
-						//On affiche la date à laquelle elle doit etre commandé pour arriver a temps pour la continuité de la production
-						System.out.println("Commande de bobine à passer le :" + jour);
+						
+						//Calcul du prix de la commande
+						if(dateCommande.YEAR > anneeDateDepart){
+							moisCourant = dateCommande.MONTH + 12;
+						} else {
+							moisCourant = dateCommande.MONTH;
+						}
+						prixAcierCourant = (moisCourant-moisDateDepart) * 0.02 * 10000;
+						
+						commandesPassees.add(prixAcierCourant);
+						//Si la production ï¿½ sorti 1000 unitï¿½es, 1 bobine ï¿½ ï¿½tï¿½ consommï¿½ il faut donc en recommander 1
+						//On affiche la date ï¿½ laquelle elle doit etre commandï¿½ pour arriver a temps pour la continuitï¿½ de la production
+						System.out.println("Commande de bobine ï¿½ passer le :" + jour);
 					}
 				} else {
-					if (tpsProduction > 6) {
-						//AJout des 1000 unitées si la chaines de production à terminé (6 ici)
+					while (tpsProduction > 6) {
+						//AJout des 1000 unitï¿½es si la chaines de production ï¿½ terminï¿½ (6 ici)
 						production += 1000;
 						//On retire les 6h pour avoir un temps de production exact pour la suite
 						tpsProduction -= 6;
@@ -96,21 +146,23 @@ public class Engine {
 						dateCommande = (Calendar) dateCourante.clone();
 						dateCommande.add(Calendar.DATE, -10);
 						Date jour = dateCommande.getTime();
-						//Si la production à sorti 1000 unitées, 1 bobine à été consommé il faut donc en recommander 1
-						//On affiche la date à laquelle elle doit etre commandé pour arriver a temps pour la continuité de la production
-						System.out.println("Commande de bobine à passer le :" + jour);
-						//on verifie si une deuxième bobine à été produite dans la même journée
-						if (tpsProduction > 6) {
-							production += 1000;
-							tpsProduction -= 6;
-							//Si la production à sorti 1000 unitées, 1 bobine à été consommé il faut donc en recommander 1
-							//On affiche la date à laquelle elle doit etre commandé pour arriver a temps pour la continuité de la production
-							System.out.println("Commande de bobine à passer le :" + jour);
+						
+						//Calcul du prix de la commande
+						if(dateCommande.YEAR > anneeDateDepart){
+							moisCourant = dateCommande.MONTH + 12;
+						} else {
+							moisCourant = dateCommande.MONTH;
 						}
+						prixAcierCourant = (moisCourant-moisDateDepart) * 0.02 * 10000;
+						
+						commandesPassees.add(prixAcierCourant);
+						//Si la production ï¿½ sorti 1000 unitï¿½es, 1 bobine ï¿½ ï¿½tï¿½ consommï¿½ il faut donc en recommander 1
+						//On affiche la date ï¿½ laquelle elle doit etre commandï¿½ pour arriver a temps pour la continuitï¿½ de la production
+						System.out.println("Commande de bobine ï¿½ passer le :" + jour);
 					}
 				}
 				Date jour = dateCourante.getTime();
-				//On affiche la date courante et le nombre d'unitées en stock
+				//On affiche la date courante et le nombre d'unitï¿½es en stock
 				System.out.println("jour : " + jour + " production : " + production);
 				Thread.sleep(100);
 			}
