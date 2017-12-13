@@ -68,7 +68,6 @@ public class Engine {
 		//Creation de la date de d�part, creation de 2 dates suppl�mentaires
 		//pour le jour 1 et 2 car le temps de production de d�part est de 12h (temps pour 1000 unit�es)
 		//puis 6h car les machines fonctionnent en parall�les
-		//(il devrait �tre possible de le faire plus joliement
 		Calendar dateCourante = Calendar.getInstance();
 		dateCourante.setTime(new Date("10/01/1969"));
 		Calendar jour1 = Calendar.getInstance();
@@ -108,7 +107,7 @@ public class Engine {
 					
 					prixProd += 5*questionQuatre*6000;
 					
-					datesEtCoutLivraisonClient.add(dateCourante.getTime().getDate()+"/"+dateCourante.getTime().getMonth()+"/"+dateCourante.getTime().getYear()+"  \t"+5*questionQuatre*1000+" boulons\tProduction : "+prixProd+"€\tVente : "+prixProd*1.7+"€");
+					datesEtCoutLivraisonClient.add(dateCourante.getTime().getDate()+"/"+(dateCourante.getTime().getMonth()+1)+"/"+dateCourante.getTime().getYear()+"  \t"+5*questionQuatre*1000+" boulons\tProduction : "+prixProd+"€\tVente : "+prixProd*1.7+"€");
 					System.out.println("Livraison d'une commande de "+5*questionQuatre*1000+" boulons au "+dateCourante.getTime()+", coût de prod : "+ prixProd +"€ prix de vente "+ prixProd*1.7+"€");
 
 					prixProd = 0;
@@ -145,7 +144,7 @@ public class Engine {
 					
 					prixProd += 15*questionQuatre*6000;
 					
-					datesEtCoutLivraisonClient.add(dateCourante.getTime().getDate()+"/"+dateCourante.getTime().getMonth()+"/"+dateCourante.getTime().getYear()+"  \t"+15*questionQuatre*1000+" boulons\tProduction : "+prixProd+"€\tVente : "+prixProd*1.7+"€");
+					datesEtCoutLivraisonClient.add(dateCourante.getTime().getDate()+"/"+(dateCourante.getTime().getMonth()+1)+"/"+dateCourante.getTime().getYear()+"  \t"+15*questionQuatre*1000+" boulons\tProduction : "+prixProd+"€\tVente : "+prixProd*1.7+"€");
 					System.out.println("Livraison d'une commande de 15,000 boulons au "+dateCourante.getTime()+", coût de prod : "+ prixProd +"€ prix de vente "+ prixProd*1.7+"€");
 
 					prixProd = 0;
@@ -179,7 +178,7 @@ public class Engine {
 						commandesPassees.add(new Double[] {1.0,prixAcierCourant});
 						
 						
-						datesCommandesFournisseurs.add(jour.getDate()+"/"+jour.getMonth()+"/"+jour.getYear());
+						datesCommandesFournisseurs.add(jour.getDate()+"/"+(jour.getMonth()+1)+"/"+jour.getYear());
 						//Si la production � sorti 1000 unit�es, 1 bobine � �t� consomm� il faut donc en recommander 1
 						//On affiche la date � laquelle elle doit etre command� pour arriver a temps pour la continuit� de la production
 						System.out.println("Commande de bobine � passer le :" + jour);
@@ -206,7 +205,7 @@ public class Engine {
 						prixAcierCourant = 10000 + (moisCourant-moisDateDepart) * 0.02 * 10000;
 						
 						commandesPassees.add(new Double[] {1.0, prixAcierCourant});
-						datesCommandesFournisseurs.add(jour.getDate()+"/"+jour.getMonth()+"/"+jour.getYear());
+						datesCommandesFournisseurs.add(jour.getDate()+"/"+(jour.getMonth()+1)+"/"+jour.getYear());
 						//Si la production � sorti 1000 unit�es, 1 bobine � �t� consomm� il faut donc en recommander 1
 						//On affiche la date � laquelle elle doit etre command� pour arriver a temps pour la continuit� de la production
 						System.out.println("Commande de bobine � passer le :" + jour);
